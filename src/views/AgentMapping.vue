@@ -225,8 +225,13 @@ export default {
       this.messages.push({ role: 'user', text: content });
       this.userInput = '';
 
+      const API_BASE = 'http://10.242.48.50:8000';
+
       try {
-        const res = await axios.post('/api/nlp/parse', { text: content }, { timeout: 180000 });
+        const res = await axios.post(`${API_BASE}/task`, {
+          text: content,
+          feedback: null
+        }, { timeout: 180000 });
         const data = res.data;
 
         console.log("== raw data ==", data);
@@ -378,7 +383,7 @@ export default {
 
     fetchHistory: async function () {
       try {
-        const res = await axios.get('/api/nlp/history?limit=20')
+        const res = await axios.get(`${API_BASE}/history?limit=20`)
         this.historyList = res.data.history || []
       } catch (e) {
         console.error('获取历史失败', e)
